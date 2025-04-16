@@ -7,17 +7,31 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
-const (
-	username = ""
-	password = ""
-	hostname = "127.0.0.1:3306"
-	dbname   = "passwordgenerator"
+var (
+	username string
+	password string
+	hostname string
+	dbname   string
 )
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Could not load .env file:", err)
+	}
+
+	username = os.Getenv("NAME")
+	password = os.Getenv("PASSWORD")
+	hostname = os.Getenv("HOSTNAME")
+	dbname = os.Getenv("DBNAME")
+}
 
 func dsn() string {
 	return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbname)
